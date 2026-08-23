@@ -24,11 +24,11 @@ enum ZiplineShortener {
             return
         }
 
-        var request = URLRequest(url: base.appendingPathComponent("api/shorten"))
+        var request = URLRequest(url: base.appendingPathComponent("api/user/urls"))
         request.httpMethod = "POST"
         request.setValue(token, forHTTPHeaderField: "authorization")
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        request.httpBody = try? JSONSerialization.data(withJSONObject: ["url": longURL])
+        request.httpBody = try? JSONSerialization.data(withJSONObject: ["destination": longURL])
 
         URLSession.shared.dataTask(with: request) { data, response, error in
             if let error = error { completion(.failure(error)); return }
