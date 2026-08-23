@@ -4,6 +4,7 @@ import Cocoa
 struct SettingsView: View {
     @State private var baseURLString: String = ConfigStore.shared.baseURL?.absoluteString ?? ""
     @State private var token: String = ConfigStore.shared.token ?? ""
+    @State private var shortLinkDomainString: String = ConfigStore.shared.shortLinkDomain?.absoluteString ?? ""
     @State private var immichBaseURLString: String = ConfigStore.shared.immichBaseURL?.absoluteString ?? ""
     @State private var immichAPIKey: String = ConfigStore.shared.immichAPIKey ?? ""
     @State private var flashPaperBaseURLString: String = ConfigStore.shared.flashPaperBaseURL?.absoluteString ?? ""
@@ -21,6 +22,11 @@ struct SettingsView: View {
                     .textFieldStyle(.roundedBorder)
                 SecureField("API Token", text: $token)
                     .textFieldStyle(.roundedBorder)
+                TextField("Short-link display domain (optional) — e.g. https://links.jessedyer.org", text: $shortLinkDomainString)
+                    .textFieldStyle(.roundedBorder)
+                Text("If set, short links come back as {this domain}/{id} instead of Zipline's own /go/{id} host.")
+                    .font(.caption2)
+                    .foregroundColor(.secondary)
             }
 
             Divider()
@@ -46,7 +52,7 @@ struct SettingsView: View {
                     .foregroundColor(.secondary)
             }
 
-            Text("⌘⇧U uploads whatever's on the clipboard. Images go to Immich and come back as a public share link; other files go to Zipline; plain text goes to FlashPaper as a self-destructing note. Either way the link lands on your clipboard.")
+            Text("⌘⇧U uploads whatever's on the clipboard. Images go to Immich and come back as a public share link; other files go to Zipline; a URL gets shortened via Zipline; any other text goes to FlashPaper as a self-destructing note. Either way the link lands on your clipboard.")
                 .font(.caption)
                 .foregroundColor(.secondary)
 
@@ -60,6 +66,7 @@ struct SettingsView: View {
                 Button("Save") {
                     ConfigStore.shared.baseURL = URL(string: baseURLString)
                     ConfigStore.shared.token = token
+                    ConfigStore.shared.shortLinkDomain = shortLinkDomainString.isEmpty ? nil : URL(string: shortLinkDomainString)
                     ConfigStore.shared.immichBaseURL = URL(string: immichBaseURLString)
                     ConfigStore.shared.immichAPIKey = immichAPIKey
                     ConfigStore.shared.flashPaperBaseURL = URL(string: flashPaperBaseURLString)

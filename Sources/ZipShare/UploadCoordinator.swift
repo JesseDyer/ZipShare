@@ -39,15 +39,28 @@ final class UploadCoordinator {
             return
         }
 
-        // 3. Plain text — FlashPaper.
-        if let text = pb.string(forType: .string), !text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
-            print("[ZipShare] found text on pasteboard (\(text.count) chars)")
-            routeToFlashPaper(text: text)
-            return
+        // 3. Plain text — a URL gets shortened via Zipline; anything else goes to FlashPaper.
+        if let raw = pb.string(forType: .string) {
+            let text = raw.trimmingCharacters(in: .whitespacesAndNewlines)
+            if !text.isEmpty {
+                if isURL(text) {
+                    print("[ZipShare] found URL on pasteboard: \(text)")
+                    routeToZiplineShorten(longURL: text)
+                } else {
+                    print("[ZipShare] found text on pasteboard (\(text.count) chars)")
+                    routeToFlashPaper(text: text)
+                }
+                return
+            }
         }
 
         print("[ZipShare] nothing uploadable found on pasteboard")
         notify(title: "ZipShare", body: "Nothing uploadable on the clipboard.")
+    }
+
+    private func isURL(_ text: String) -> Bool {
+        guard let url = URL(string: text), let scheme = url.scheme?.lowercased() else { return false }
+        return (scheme == "http" || scheme == "https") && url.host != nil
     }
 
     private func isImageFile(_ url: URL) -> Bool {
@@ -76,6 +89,18 @@ final class UploadCoordinator {
         print("[ZipShare] uploading to Immich: \(ConfigStore.shared.immichBaseURL!.absoluteString)")
         ImmichUploader.upload(fileURL: fileURL) { [weak self] result in
             DispatchQueue.main.async { self?.handle(result, source: "Immich") }
+        }
+    }
+
+    private func routeToZiplineShorten(longURL: String) {
+        guard ConfigStore.shared.isConfigured else {
+            print("[ZipShare] Zipline not configured")
+            notify(title: "ZipShare", body: "Set your Zipline URL and token in Preferences first.")
+            return
+        }
+        print("[ZipShare] shortening via Zipline: \(ConfigStore.shared.baseURL!.absoluteString)")
+        ZiplineShortener.shorten(longURL: longURL) { [weak self] result in
+            DispatchQueue.main.async { self?.handle(result, source: "Zipline (short link)") }
         }
     }
 

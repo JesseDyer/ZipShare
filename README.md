@@ -6,8 +6,9 @@ clipboard, with a toast notification.
 
 **Routing:** images (a copied image file, or raw pasted/screenshotted image
 data) go to **Immich** and come back as a public, unauthenticated share
-link. Other copied files go to **Zipline**. Plain text on the clipboard
-goes to **FlashPaper** as a self-destructing note.
+link. Other copied files go to **Zipline**. A URL on the clipboard gets
+shortened via **Zipline's URL shortener**. Any other plain text goes to
+**FlashPaper** as a self-destructing note.
 
 No Dock icon, no Xcode project — just a Swift package and a Makefile.
 
@@ -35,7 +36,10 @@ System Settings → Privacy & Security → "Open Anyway") the first time.
 Click the paperclip icon in the menu bar → **Preferences…** and enter:
 
 - **Zipline** — Base URL (e.g. `https://share.jessedyer.org`, no trailing
-  path) and your existing API token.
+  path) and your existing API token. Optionally a "short-link display
+  domain" (e.g. `https://links.jessedyer.org`) — if set, short links come
+  back rewritten to `{that domain}/{id}` instead of Zipline's own
+  `/go/{id}` host, same id either way.
 - **Immich** — Base URL (e.g. `https://photos.jessedyer.org`) and an API
   key from your account settings → API Keys page.
 - **FlashPaper** — Base URL (e.g. `https://flashpaper.jessedyer.org`). No
@@ -62,6 +66,9 @@ Both tokens go to Keychain, not a plaintext prefs file.
   Covers standard image extensions (jpg, png, heic, gif, etc.) — if you
   copy something with an unusual/missing extension it'll fall through to
   Zipline.
+- **URL detection** for text routing (`isURL` in `UploadCoordinator.swift`)
+  requires an http/https scheme and a host. Anything that doesn't parse as
+  one of those goes to FlashPaper as plain text instead.
 - **Immich shared links** are created with `showMetadata: false` (strips
   EXIF/GPS from what recipients can see) and `allowDownload: true`. Change
   the `payload` dict in `ImmichUploader.swift` if you want different

@@ -7,6 +7,7 @@ final class ConfigStore {
     private let service = "org.jessedyer.zipshare"
     private let account = "apiToken"
     private let baseURLKey = "zipline.baseURL"
+    private let shortLinkDomainKey = "zipline.shortLinkDomain"
     private let immichAccount = "immichApiKey"
     private let immichBaseURLKey = "immich.baseURL"
     private let flashPaperBaseURLKey = "flashpaper.baseURL"
@@ -27,6 +28,11 @@ final class ConfigStore {
 
     var isConfigured: Bool {
         baseURL != nil && token != nil
+    }
+
+    var shortLinkDomain: URL? {
+        get { defaults.string(forKey: shortLinkDomainKey).flatMap { URL(string: $0) } }
+        set { defaults.set(newValue?.absoluteString, forKey: shortLinkDomainKey) }
     }
 
     var immichBaseURL: URL? {
