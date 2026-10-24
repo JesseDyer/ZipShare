@@ -35,14 +35,14 @@ System Settings → Privacy & Security → "Open Anyway") the first time.
 
 Click the paperclip icon in the menu bar → **Preferences…** and enter:
 
-- **Zipline** — Base URL (e.g. `https://share.jessedyer.org`, no trailing
+- **Zipline** — Base URL (e.g. `https://share.example.com`, no trailing
   path) and your existing API token. Optionally a "short-link display
-  domain" (e.g. `https://links.jessedyer.org`) — if set, short links come
+  domain" (e.g. `https://links.example.com`) — if set, short links come
   back rewritten to `{that domain}/{id}` instead of Zipline's own
   `/go/{id}` host, same id either way.
-- **Immich** — Base URL (e.g. `https://photos.jessedyer.org`) and an API
+- **Immich** — Base URL (e.g. `https://photos.example.com`) and an API
   key from your account settings → API Keys page.
-- **FlashPaper** — Base URL (e.g. `https://flashpaper.jessedyer.org`). No
+- **FlashPaper** — Base URL (e.g. `https://flashpaper.example.com`). No
   token — it's an open POST endpoint that encrypts server-side.
 
 Both tokens go to Keychain, not a plaintext prefs file.

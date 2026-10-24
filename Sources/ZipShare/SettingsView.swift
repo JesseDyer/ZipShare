@@ -18,11 +18,11 @@ struct SettingsView: View {
             VStack(alignment: .leading, spacing: 8) {
                 Text("Zipline — non-image files")
                     .font(.subheadline).bold()
-                TextField("Base URL — e.g. https://share.jessedyer.org", text: $baseURLString)
+                TextField("Base URL — e.g. https://share.example.com", text: $baseURLString)
                     .textFieldStyle(.roundedBorder)
                 SecureField("API Token", text: $token)
                     .textFieldStyle(.roundedBorder)
-                TextField("Short-link display domain (optional) — e.g. https://links.jessedyer.org", text: $shortLinkDomainString)
+                TextField("Short-link display domain (optional) — e.g. https://links.example.com", text: $shortLinkDomainString)
                     .textFieldStyle(.roundedBorder)
                 Text("If set, short links come back as {this domain}/{id} instead of Zipline's own /go/{id} host.")
                     .font(.caption2)
@@ -34,7 +34,7 @@ struct SettingsView: View {
             VStack(alignment: .leading, spacing: 8) {
                 Text("Immich — images")
                     .font(.subheadline).bold()
-                TextField("Base URL — e.g. https://photos.jessedyer.org", text: $immichBaseURLString)
+                TextField("Base URL — e.g. https://photos.example.com", text: $immichBaseURLString)
                     .textFieldStyle(.roundedBorder)
                 SecureField("API Key", text: $immichAPIKey)
                     .textFieldStyle(.roundedBorder)
@@ -45,7 +45,7 @@ struct SettingsView: View {
             VStack(alignment: .leading, spacing: 8) {
                 Text("FlashPaper — text")
                     .font(.subheadline).bold()
-                TextField("Base URL — e.g. https://flashpaper.jessedyer.org", text: $flashPaperBaseURLString)
+                TextField("Base URL — e.g. https://flashpaper.example.com", text: $flashPaperBaseURLString)
                     .textFieldStyle(.roundedBorder)
                 Text("No token needed — FlashPaper takes a plain POST and encrypts server-side.")
                     .font(.caption2)
